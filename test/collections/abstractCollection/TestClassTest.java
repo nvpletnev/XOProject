@@ -151,9 +151,9 @@ public class TestClassTest {
         testInstance.add(2);
 
         final Iterator<Integer> iter = testInstance.iterator();
-        iter.next();
+        System.out.println(iter.next());
         iter.remove();
-        iter.next();
+        System.out.println(iter.next());
         iter.remove();
         try {
             iter.next();

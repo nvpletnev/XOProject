@@ -116,6 +116,7 @@ public class TestClass<T> implements Collection<T> {
     private class ElementsIterator implements Iterator<T> {
 
         private int count;
+        private int indexForRemove;
 
         @Override
         public boolean hasNext() {
@@ -135,10 +136,18 @@ public class TestClass<T> implements Collection<T> {
         @Override
         public void remove() {
 
-            if (count > TestClass.this.size() || next().equals(null)) {
-                throw new IllegalStateException();
+            if (TestClass.this.isEmpty()) throw new IllegalStateException();
+
+            if (count > indexForRemove) {
+                TestClass.this.remove(indexForRemove++);
+                incr();
             }
-            else TestClass.this.remove(TestClass.this.size() - 1);
+            else throw new IllegalStateException();
+        }
+
+        private void incr() {
+            count--;
+            indexForRemove--;
         }
 
 
