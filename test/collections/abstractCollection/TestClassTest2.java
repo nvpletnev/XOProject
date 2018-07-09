@@ -71,8 +71,10 @@ public class TestClassTest2 {
         testInstance.add(1);
         testInstance.add(2);
         testInstance.add(3);
+        System.out.println(testInstance.size());
 
         final Integer[] input = new Integer[testInstance.size()];
+        System.out.println(input.length);
 
         final Integer[] result = testInstance.toArray(input);
         assertArrayEquals(input, result);

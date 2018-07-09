@@ -62,7 +62,6 @@ public class ArrayCollection<T> implements Collection<T> {
 
     @Override
     public boolean remove(Object o) {
-        //TODO
 
         for (int i = 0; i < size(); i++) {
             if (this.array[i].equals(o)) {
@@ -102,7 +101,6 @@ public class ArrayCollection<T> implements Collection<T> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        //TODO
         for (int i = 0; i < size(); i++) {
             if (!c.contains(array[i]))
                 /*Счетчик цикла необходимо уменьшать при каждом удалении.

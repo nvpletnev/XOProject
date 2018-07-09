@@ -1,5 +1,6 @@
 package collections.abstractCollection;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import java.util.Iterator;
@@ -44,21 +45,17 @@ public class TestClass<T> implements Collection<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
 
-        if (a.equals(null)) throw new NullPointerException();
+        if (a == null) throw new NullPointerException();
 
-        if (a.length > this.size) {
-            for (int i = 0; i < size; i++) {
-                a[i] = (T1) m[i];
-            }
-            if (!this.contains(null)) a[size] = null;
-            return a;
+        if (a.length < this.size) {
+            return a = (T1[]) Arrays.copyOf(m, size, a.getClass());
         }
 
-            else {
-            T1[] b = (T1[]) new Object[size];
-            System.arraycopy(m, 0, b, 0, size);
-            return a = b;
-        }
+        System.arraycopy(m, 0, a, 0, size);
+
+        if (a.length > size) a[size] = null;
+
+        return a;
 
     }
 
