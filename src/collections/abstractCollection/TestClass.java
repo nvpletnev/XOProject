@@ -40,9 +40,26 @@ public class TestClass<T> implements Collection<T> {
         return newM;
     }
 
+    //TODO
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return (T1[])this.toArray();
+
+        if (a.equals(null)) throw new NullPointerException();
+
+        if (a.length > this.size) {
+            for (int i = 0; i < size; i++) {
+                a[i] = (T1) m[i];
+            }
+            if (!this.contains(null)) a[size] = null;
+            return a;
+        }
+
+            else {
+            T1[] b = (T1[]) new Object[size];
+            System.arraycopy(m, 0, b, 0, size);
+            return a = b;
+        }
+
     }
 
     @Override
@@ -132,13 +149,13 @@ public class TestClass<T> implements Collection<T> {
             else throw new NoSuchElementException();
         }
 
-        //TODO
         @Override
         public void remove() {
 
             if (TestClass.this.isEmpty()) throw new IllegalStateException();
 
             if (count > indexForRemove) {
+
                 TestClass.this.remove(indexForRemove++);
                 incr();
             }
