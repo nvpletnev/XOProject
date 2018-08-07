@@ -1,5 +1,6 @@
 package collections.listIterator;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Collection;
@@ -240,28 +241,32 @@ public class ArrayList<T> implements List<T> {
         @Override
         public int previousIndex() {
             // BEGIN (write your solution here)
-
+            if (index == 0) return -1;
+            return index - 1;
             // END
         }
 
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-
+            if (index == ArrayList.this.size()) return ArrayList.this.size();
+            return index + 1;
             // END
         }
 
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-
+            return index > 0;
             // END
         }
 
         @Override
         public T previous() {
             // BEGIN (write your solution here)
-
+            if (!hasPrevious()) throw new NoSuchElementException();
+            lastIndex = index--;
+            return ArrayList.this.m[lastIndex];
             // END
         }
 
