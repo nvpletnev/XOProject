@@ -259,7 +259,10 @@ public class ArrayList<T> implements List<T> {
         // . 1 . 2 . 8 ^ 3 . 4. 5
         public void add(final T element) {
             // BEGIN (write your solution here)
-            if (ArrayList.this.size() == 0) ArrayList.this.add(element);
+            if (ArrayList.this.size() == 0) {
+                ArrayList.this.add(element);
+                index++;
+            }
 
             else {
                 ArrayList.this.add(index++, element);
