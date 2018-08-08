@@ -3,6 +3,7 @@ package collections.listIterator;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -21,6 +22,34 @@ public class ArrayListTest {
         testInstance = new ArrayList<>();
         listIterator = testInstance.listIterator();
     }
+
+    @Test
+    public void test() {
+        testInstance.add(1);
+        testInstance.add(2);
+        testInstance.add(3);
+        testInstance.add(4);
+        System.out.println(listIterator.next());
+        System.out.println(listIterator.next());
+        System.out.println("Previos index: " + listIterator.previousIndex()); // 1
+        System.out.println("Previos (expected 2) actual is: " + listIterator.previous());
+        System.out.println("Previos index: " + listIterator.previousIndex()); // 0
+        System.out.println("Next index: " + listIterator.nextIndex()); // 1
+        System.out.println("Get: " + testInstance.get(0));
+        System.out.println("Size: " + testInstance.size());
+
+        listIterator.add(9);
+        System.out.println("must be 9: " + listIterator.previous());
+        //listIterator.add(10);
+
+        for (int x: testInstance) {
+
+            System.out.println(x);
+        }
+
+
+    }
+
 
 
     @Test
@@ -269,9 +298,11 @@ public class ArrayListTest {
 
     @Test
     public void testAddInIteratorWhenEmptyList() {
-
+        System.out.println(Arrays.deepToString(testInstance.toArray()));
         listIterator.add(1);
+        System.out.println(Arrays.deepToString(testInstance.toArray()));
         listIterator.add(2);
+        System.out.println(Arrays.deepToString(testInstance.toArray()));
         assertSame("previousIndex ",1, listIterator.previousIndex());
         assertSame("previous element ", 2, listIterator.previous());
         assertSame("First element ", 1, testInstance.get(0));

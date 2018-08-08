@@ -224,17 +224,19 @@ public class ArrayList<T> implements List<T> {
         }
 
         @Override
-        // . 1 . 2 . 8 ^ 3 . 4. 5
-        public void add(final T element) {
+        public boolean hasPrevious() {
             // BEGIN (write your solution here)
-
+            return index > 0;
             // END
         }
 
         @Override
-        public void set(final T element) {
+        public T previous() {
             // BEGIN (write your solution here)
-
+            if (!hasPrevious()) throw new NoSuchElementException();
+            lastIndex = previousIndex();
+            index--;
+            return ArrayList.this.m[lastIndex];
             // END
         }
 
@@ -249,24 +251,32 @@ public class ArrayList<T> implements List<T> {
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-            if (index == ArrayList.this.size()) return ArrayList.this.size();
-            return index + 1;
+            return index;
             // END
         }
 
         @Override
-        public boolean hasPrevious() {
+        // . 1 . 2 . 8 ^ 3 . 4. 5
+        public void add(final T element) {
             // BEGIN (write your solution here)
-            return index > 0;
+            if (ArrayList.this.size() == 0) ArrayList.this.add(element);
+
+            else {
+                ArrayList.this.add(index++, element);
+            }
+
             // END
         }
 
         @Override
-        public T previous() {
+        public void set(final T element) {
             // BEGIN (write your solution here)
-            if (!hasPrevious()) throw new NoSuchElementException();
-            lastIndex = index--;
-            return ArrayList.this.m[lastIndex];
+            if (lastIndex < 0) {
+                throw new IllegalStateException();
+            }
+            ArrayList.this.set(lastIndex, element);
+
+
             // END
         }
 
