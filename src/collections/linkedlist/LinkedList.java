@@ -27,7 +27,10 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean contains(final Object o) {
         // BEGIN (write your solution here)
-
+        for (T t : this) {
+            if (t.equals(o)) return true;
+        }
+        return false;
         // END
     }
 
@@ -39,7 +42,11 @@ public class LinkedList<T> implements List<T> {
     @Override
     public Object[] toArray() {
         // BEGIN (write your solution here)
-
+        Object[] array = new Object[size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = this.get(i);
+        }
+        return array;
         // END
     }
 
@@ -53,7 +60,19 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean add(final T newElement) {
         // BEGIN (write your solution here)
+        if (isEmpty()) {
+            Item<T> item = new Item<>(newElement, null, null);
+            this.firstInList = item;
+            this.lastInList = item;
+            this.size++;
+            return true;
+        }
 
+        Item<T> item = new Item<>(newElement, lastInList, null);
+        this.lastInList.nextItem = item;
+        this.lastInList = item;
+        this.size++;
+        return true;
         // END
     }
 
@@ -184,7 +203,7 @@ public class LinkedList<T> implements List<T> {
 
         ElementsIterator(final int index) {
             // BEGIN (write your solution here)
-
+                this.index = index;
             // END
         }
 
