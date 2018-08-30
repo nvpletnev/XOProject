@@ -27,8 +27,8 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean contains(final Object o) {
         // BEGIN (write your solution here)
-        for (T t : this) {
-            if (t.equals(o)) return true;
+        for (T item : this) {
+            if (item.equals(o)) return true;
         }
         return false;
         // END
@@ -42,6 +42,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public Object[] toArray() {
         // BEGIN (write your solution here)
+
         Object[] array = new Object[size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = this.get(i);
@@ -53,6 +54,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         // BEGIN (write your solution here)
+        //TODO
 
         // END
     }
@@ -79,7 +81,7 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(final Object o) {
         // BEGIN (write your solution here)
-
+        //TODO
         // END
     }
 
@@ -119,12 +121,21 @@ public class LinkedList<T> implements List<T> {
     public void clear() {
         // BEGIN (write your solution here)
 
+        for (int i = 0; i < size; i++) {
+            getItemByIndex(i).element = null;
+            getItemByIndex(i).nextItem = null;
+            getItemByIndex(i).prevItem = null;
+        }
+        firstInList = lastInList = null;
+        size = 0;
+
         // END
     }
 
     @Override
     public T remove(final int index) throws IndexOutOfBoundsException{
         // BEGIN (write your solution here)
+        //TODO
 
         // END
     }
@@ -132,6 +143,7 @@ public class LinkedList<T> implements List<T> {
 
     private void remove(final Item<T> current) {
         // BEGIN (write your solution here)
+        //TODO
 
         // END
     }
@@ -159,7 +171,13 @@ public class LinkedList<T> implements List<T> {
     @Override
     public int indexOf(final Object o) {
         // BEGIN (write your solution here)
-
+        int index = -1;
+        if (o == null) return index;
+        for (T item : this) {
+            index++;
+            if (item.equals(o)) return index;
+        }
+        return -1;
         // END
     }
 
@@ -176,19 +194,44 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T set(final int index, final T element) {
         // BEGIN (write your solution here)
-
+        Item<T> item = getItemByIndex(index);
+        T oldItem = item.element;
+        item.element = element;
+        return oldItem;
         // END
     }
 
     @Override
     public T get(final int index) {
         // BEGIN (write your solution here)
-
+        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+        int count = -1;
+        for (T item : this) {
+            count++;
+            if (index == count) return item;
+        }
+        return null;
         // END
     }
 
     private Item<T> getItemByIndex(final int index) {
         // BEGIN (write your solution here) An auxiliary method for searching for node by index.
+        Item<T> item;
+
+        if (index < (size >> 1)) {
+            item = firstInList;
+            for (int i = 0; i < index; i++) {
+                item = item.nextItem;
+            }
+            return item;
+        } else {
+            item = lastInList;
+            for (int i = size() - 1; i > index; i--) {
+                item = item.prevItem;
+            }
+            return item;
+        }
+
 
         // END
     }
@@ -293,4 +336,3 @@ public class LinkedList<T> implements List<T> {
         }
     }
 }
-
