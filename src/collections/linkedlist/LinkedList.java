@@ -28,7 +28,7 @@ public class LinkedList<T> implements List<T> {
     public boolean contains(final Object o) {
         // BEGIN (write your solution here)
         for (T item : this) {
-            if (item.equals(o)) return true;
+            if (item == o) return true;
         }
         return false;
         // END
@@ -54,8 +54,16 @@ public class LinkedList<T> implements List<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         // BEGIN (write your solution here)
-        //TODO
+        if (a.length < size)
+            a = (T1[])java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+        int i = 0;
+        Object[] result = a;
+        for (Item<T> x = firstInList; x != null; x = x.nextItem)
+            result[i++] = x.element;
 
+        if (a.length > size)
+            a[size] = null;
+        return a;
         // END
     }
 
@@ -81,7 +89,15 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean remove(final Object o) {
         // BEGIN (write your solution here)
-        //TODO
+        if(o == null) return false;
+        for (T t: this) {
+            if (o.equals(t)) {
+                remove(getItemByIndex(indexOf(t)));
+                return true;
+            }
+        }
+        return false;
+
         // END
     }
 
@@ -135,18 +151,13 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T remove(final int index) throws IndexOutOfBoundsException{
         // BEGIN (write your solution here)
-        //TODO
-
+        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+        T removedItem = getItemByIndex(index).element;
+        remove(getItemByIndex(index));
+        return removedItem;
         // END
     }
 
-
-    private void remove(final Item<T> current) {
-        // BEGIN (write your solution here)
-        //TODO
-
-        // END
-    }
 
     @Override
     public List<T> subList(final int start, final int end) {
@@ -194,6 +205,8 @@ public class LinkedList<T> implements List<T> {
     @Override
     public T set(final int index, final T element) {
         // BEGIN (write your solution here)
+        if (element == null) throw new IllegalStateException();
+        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
         Item<T> item = getItemByIndex(index);
         T oldItem = item.element;
         item.element = element;
@@ -205,12 +218,7 @@ public class LinkedList<T> implements List<T> {
     public T get(final int index) {
         // BEGIN (write your solution here)
         if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
-        int count = -1;
-        for (T item : this) {
-            count++;
-            if (index == count) return item;
-        }
-        return null;
+        return getItemByIndex(index).element;
         // END
     }
 
@@ -221,18 +229,39 @@ public class LinkedList<T> implements List<T> {
         if (index < (size >> 1)) {
             item = firstInList;
             for (int i = 0; i < index; i++) {
-                item = item.nextItem;
+                item = item.getNextItem();
             }
             return item;
         } else {
             item = lastInList;
             for (int i = size() - 1; i > index; i--) {
-                item = item.prevItem;
+                item = item.getPrevItem();
             }
             return item;
         }
 
 
+        // END
+    }
+
+    private void remove(final Item<T> current) {
+        // BEGIN (write your solution here)
+        Item<T> nextNode;
+        Item<T> prevNode;
+
+        if (current.equals(firstInList)) {
+            firstInList = firstInList.getNextItem();
+            size--;
+        } else if (current.equals(lastInList)) {
+            lastInList = lastInList.getPrevItem();
+            size--;
+        } else {
+            nextNode = current.getNextItem();
+            prevNode = current.getPrevItem();
+            prevNode.nextItem = nextNode;
+            nextNode.prevItem = prevNode;
+            size--;
+        }
         // END
     }
 
@@ -246,14 +275,15 @@ public class LinkedList<T> implements List<T> {
 
         ElementsIterator(final int index) {
             // BEGIN (write your solution here)
-                this.index = index;
+            currentItemInIterator = (index == size()) ? null : getItemByIndex(index);
+            this.index = index;
             // END
         }
 
         @Override
         public boolean hasNext() {
             // BEGIN (write your solution here)
-
+            return LinkedList.this.size() > index;
             // END
         }
 
@@ -261,19 +291,29 @@ public class LinkedList<T> implements List<T> {
         public T next() {
             // BEGIN (write your solution here)
 
+            if (!hasNext()) throw new NoSuchElementException();
+            lastReturnedItemFromIterator = currentItemInIterator;
+            currentItemInIterator = currentItemInIterator.getNextItem();
+            index++;
+            return lastReturnedItemFromIterator.element;
             // END
         }
 
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-
+            return index > 0;
             // END
         }
 
         @Override
         public T previous() {
             // BEGIN (write your solution here)
+            if (!hasPrevious()) throw new NoSuchElementException();
+            currentItemInIterator = (currentItemInIterator == null) ? lastInList : currentItemInIterator.prevItem;
+            lastReturnedItemFromIterator = currentItemInIterator;
+            index--;
+            return lastReturnedItemFromIterator.element;
 
             // END
         }
@@ -286,20 +326,21 @@ public class LinkedList<T> implements List<T> {
         @Override
         public void set(final T element) {
             // BEGIN (write your solution here)
-
+            if (lastReturnedItemFromIterator == null) throw new IllegalStateException();
+            lastReturnedItemFromIterator.element = element;
             // END
         }
 
         @Override
         public int previousIndex(){
             // BEGIN (write your solution here)
-
+            return index - 1;
             // END
         }
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-
+            return index;
             // END
         }
 
@@ -307,7 +348,14 @@ public class LinkedList<T> implements List<T> {
         @Override
         public void remove() {
             // BEGIN (write your solution here)
-
+            if (lastReturnedItemFromIterator == null) throw new IllegalStateException();
+            Item<T> lastNext = lastReturnedItemFromIterator.getNextItem();
+            LinkedList.this.remove(lastReturnedItemFromIterator);
+            if (currentItemInIterator == lastReturnedItemFromIterator) {
+                currentItemInIterator = lastNext;
+            }
+            else index--;
+            lastReturnedItemFromIterator = null;
             // END
         }
     }
