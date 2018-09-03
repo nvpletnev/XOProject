@@ -90,14 +90,10 @@ public class LinkedList<T> implements List<T> {
     public boolean remove(final Object o) {
         // BEGIN (write your solution here)
         if(o == null) return false;
-        for (T t: this) {
-            if (o.equals(t)) {
-                remove(getItemByIndex(indexOf(t)));
-                return true;
-            }
+        if (this.contains(o)) {
+            this.remove(getItemByIndex(indexOf(o)));
         }
         return false;
-
         // END
     }
 

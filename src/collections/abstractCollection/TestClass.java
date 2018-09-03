@@ -41,14 +41,14 @@ public class TestClass<T> implements Collection<T> {
         return newM;
     }
 
-    //TODO
+
     @Override
     public <T1> T1[] toArray(T1[] a) {
 
         if (a == null) throw new NullPointerException();
 
         if (a.length < this.size) {
-            return a = (T1[]) Arrays.copyOf(m, size, a.getClass());
+            return (T1[]) Arrays.copyOf(m, size, a.getClass());
         }
 
         System.arraycopy(m, 0, a, 0, size);
