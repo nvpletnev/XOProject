@@ -105,7 +105,7 @@ public class Course {
             // END
         }
         @Override
-        public int hashcode() {
+        public int hashCode() {
             return this.getStartDate().hashCode();
         }
     }
