@@ -18,19 +18,19 @@ import java.util.Date;
 
 public class Course {
 
-    private final Long uuid;
+    private final String uuid;
 
     private final String name;
 
     private final List<Session> sessions;
 
-    public Course(final Long uuid, final String name, final List<Session> sessions) {
+    public Course(final String uuid, final String name, final List<Session> sessions) {
         this.uuid = uuid;
         this.name = name;
         this.sessions = sessions;
     }
 
-    private Long getUuid() {
+    private String getUuid() {
         return uuid;
     }
 
@@ -52,6 +52,24 @@ public class Course {
         }
         return false;
         // END
+    }
+
+    /**
+     Метод hashCode должен работать следующим образом:
+     если uuid равно null - возвращает 0;
+     если uuid пустая строка - возвращает 0;
+     в других случаях нужно суммировать все characters в uuid (напомню из курса 101, что тип char - это не более чем число ;) ) и возвращать сумму.
+     Что касается класса Session, то в его случае мы должны в качестве hashCode возвращать результат работы метода hashCode у поля startDate(тип Date имеет свой hashCode).
+     */
+
+    @Override
+    public int hashCode() {
+        if (this.getUuid() == null || this.getUuid().length() == 0) return 0;
+        int result = 0;
+        for (int i = 0; i < getUuid().length(); i++) {
+            result += getUuid().charAt(i);
+        }
+        return result;
     }
 
     public class Session {
@@ -85,6 +103,10 @@ public class Course {
             }
             return false;
             // END
+        }
+        @Override
+        public int hashcode() {
+            return this.getStartDate().hashCode();
         }
     }
 }
